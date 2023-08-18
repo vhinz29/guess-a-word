@@ -1,0 +1,354 @@
+from tkinter import *
+from tkinter import messagebox
+from tkinter import ttk
+import tkinter as tk
+import random
+letters = []
+select_word = []
+restart = []
+no_turns = 5
+wins = []
+lost = []
+guess_player = []
+choose_level =['Easy','Normal','Difficault']
+already_select = []
+
+summary = []
+def submit():
+
+    loops = 1
+    losses = 0
+    win = 0
+    repeat_letters = 0
+    global no_turns
+    #print('guess number', guess_player)
+    #print('select word', select_word)
+    if select_word == []:
+        messagebox.showinfo(title = 'Guessing Game',message='Press New Game')
+
+    else:
+        #print('select word', select_word)
+        guess_letter = answer.get()
+        '''for x in already_select:
+            for y in select_word:
+                if x == y:
+                    print('double letter')'''
+            #if x == guess_letter:
+                #messagebox.showinfo(title='Guessing Game', message='Already Selected')
+        guess_letter1 = 0
+        doubles = 0
+        if len(guess_letter) == 1:
+            for x in already_select:
+                if x == guess_letter:
+                    guess_letter1 = x
+                    doubles = 1
+            for y in select_word:
+                if y == guess_letter1:
+                    doubles += 1
+            if doubles == 1:
+                messagebox.showinfo(title='Guessing Game', message='Already Selected')
+            #messagebox.showinfo(title='Guessing Game', message='Already Selected')
+            #print('tries ', no_turns)
+            #print('guess word', guess_letter)
+
+            for x in select_word:
+                if x == guess_letter:
+                    repeat_letters +=1
+                    if repeat_letters == 1:
+                        select_word.remove(x)
+                        already_select.append(x)
+                        loops -= 1
+            double_letter = 0
+
+            #print('already select ',already_select)
+            #print('select word ',select_word)
+            if loops == 1:
+                no_turns -= 1
+                tries_rem.delete(0, END)
+                tries_rem.insert(0, no_turns)
+
+            #print('guess word',guess_letter)
+            letters.append(guess_letter)
+            word_guess(guess_letter)
+            #print('append words ',letters)
+            answer.delete(0, END)
+
+            if select_word == []:
+
+                letters.clear()
+                win_lost = Label(window,text='Win',font=("Arial", 20),fg="lightgreen",bg="darkred")
+                win_lost.grid(row=8,column=4)
+                wins.append(str(1))
+                if len(wins) == 0:
+                    win = 0
+                else:
+                    for x in wins:
+                        win += 1
+
+                if len(lost) == 0:
+                    losses = 0
+                else:
+                    for x in lost:
+                        losses += 1
+                game_summary(win, losses)
+                if guess_player == [''] or guess_player == []:
+                    messagebox.showinfo(title='Guessing Game', message='Forgot to put Name')
+                #print('great you win')
+
+
+            if no_turns == 0:
+                letters.clear()
+                tries_rem.delete(0, END)
+                tries_rem.insert(0, no_turns)
+                select_word.clear()
+                win_lost = Label(window, text='Lost', font=("Arial", 20), fg="lightgreen", bg="darkred")
+                win_lost.grid(row=8, column=4)
+                lost.append(str(1))
+
+                if len(wins) == 0:
+                    win = 0
+                else:
+                    for x in wins:
+                        win += 1
+
+                if len(lost) == 0:
+                    losses = 0
+
+                else:
+                    for x in lost:
+                        losses += 1
+                        game_summary(win, losses)
+
+                if guess_player == [''] or guess_player == []:
+                    messagebox.showinfo(title='Guessing Game', message='Forgot to put Name')
+                #print('sorry you lost')
+        else:
+            messagebox.showinfo(title='Guessing Game', message='One Letter Only')
+
+def game_summary(win,loose):
+    #print('guess player', ''.join(guess_player))
+    spacing(2,5)
+    select_mode = Label(window,text='  Game Summary',font=("Arial", 15),fg="darkgray",bg="darkred")
+    select_mode.grid(row=2,column=6)
+    spacing(2,7)
+    summary.append(select_mode)
+
+    select_mode1 = Label(window, text="Hey " + ''.join(guess_player), font=("Arial", 15), fg="gold", bg="darkred")
+    select_mode1.grid(row=3, column=6)
+    summary.append(select_mode1)
+
+    wins = Label(window, text='Wins', font=("Arial", 15), fg="darkgray", bg="darkred")
+    wins.grid(row=5, column=6)
+    summary.append(wins)
+
+    wins_score = Label(window, text=win, font=("Arial", 20), fg="gold", bg="darkred")
+    wins_score.grid(row=6, column=6)
+    summary.append(wins_score)
+
+    lost = Label(window, text='Lost', font=("Arial", 15), fg="darkgray", bg="darkred")
+    lost.grid(row=8, column=6)
+    summary.append(lost)
+
+    lost_score = Label(window, text=loose, font=("Arial", 20), fg="gold", bg="darkred")
+    lost_score.grid(row=9, column=6)
+    summary.append(lost_score)
+
+def word_guess(guess):
+    jumble_letter.insert(0,guess)
+
+def right_word(mode_selects):
+    #['Easy', 'Normal', 'Difficault']
+    #print('mode_selects', mode_selects)
+    if mode_selects == 'Difficault':
+        Difficault = ["charm", "beauty", "cute", "cruel", "sexy", "great", "candid", "brave", "smart", "clever", "chill", "encode"]
+        random_words = random.choice(Difficault)
+    elif mode_selects == 'Normal':
+        Normal = ["charm", "beuty", "cute", "cruel", "sexy", "great","repeat","shoot"]
+        random_words = random.choice(Normal)
+    elif mode_selects == 'Easy':
+        Easy = ["candid", "brave", "smart", "clever","good"]
+        random_words = random.choice(Easy)
+
+    #print('random words ',random_words)
+    return random_words
+
+def submit1():
+    global no_turns
+    loops = 0
+
+    for x in summary:
+        x.grid_forget()
+    #print('summary ',summary)
+    summary.clear()
+    #user_patch.grid_forget()
+    #name_game.grid_forget()
+    already_select.clear()
+    level_choice = select_mode1.get()
+    for x in choose_level:
+        if level_choice == x:
+            #print('level choice ',level_choice)
+            loops = 1
+
+            if select_word == []:
+                answer.delete(0, END)
+                jumble_letter.delete(0, END)
+                select = right_word(level_choice)
+                for x in select:
+                    select_word.append(x)
+                correct_word.delete(0, END)
+                correct_word.insert(0, select)
+                #print('restart ', select_word)
+                no_turns = 5
+                tries_rem.delete(0, END)
+                tries_rem.insert(0, no_turns)
+
+
+            else:
+                answer.delete(0, END)
+                jumble_letter.delete(0, END)
+                correct_word.delete(0, END)
+                select_word.clear()
+                select = right_word(level_choice)
+                for x in select:
+                    select_word.append(x)
+                correct_word.delete(0, END)
+                correct_word.insert(0, select)
+                no_turns = 5
+                tries_rem.delete(0, END)
+                tries_rem.insert(0, no_turns)
+
+                #print('restart ', select_word)
+
+    if loops == 0:
+        #submit_button = Button(window, text="Enter Letter", font=("Arial", 15), fg="gold", bg='#6d1210'
+                               #, activeforeground="gold", activebackground='#6d1210', width=18,state = DISABLED)
+        #submit_button1.grid(row=7, column=0, columnspan=6)
+        messagebox.showinfo(title='Guessing Game', message='Pick Select Mode ')
+
+    ''''background = Label(window, background='darkred', padx=75, pady=150, bd=1)
+    background.place(x=520, y=67)'''
+
+    background = Label(window, background='darkred', padx=75, pady=17, bd=1)
+    background.place(x=365, y=255)
+
+def submit2():
+    wins.clear()
+    lost.clear()
+
+    guess_player.clear()
+    #print('lennnnnnnnnnnnnnnnn ',len(guess_player))
+    if len(guess_player) == 0:
+        #messagebox.showinfo(title='Guessing Game', message='Enter Name ')
+        guess_player.append(user_names1.get())
+        news_players = ''.join(guess_player)
+        #print('quess player ',news_players)
+
+
+def spacing(rows,columns):
+    space_answer = Label(window, font=("Arial", 17), fg="lightgray", bg="darkred")
+    space_answer.grid(row=rows, column=columns)
+
+window = Tk()
+window.title('vhinz')
+
+#photo = PhotoImage(file = 'word_pic.png')
+
+#window.eval("tk::PlaceWindow . top")
+
+#window.geometry("450x300")
+#spacing(0,0)
+background = Label(window, background='darkred', padx=640, pady=320, bd=1, relief=SOLID)
+background.place(x=0, y=0)
+
+spacing(1,0)
+valuex =0
+valuey =0
+for x in range(0,14):
+    background = Label(window, background='#6d1210', padx=640, pady=12, bd=1, relief=SOLID)
+    background.place(x=valuex, y=valuey)
+    #valuex += 90
+
+name_game = Label(window,text='Guessing Game',font=("Arial", 17,'bold'),fg='white',bg="#6d1210")
+name_game.grid(row=0, column=1, columnspan=5)
+
+
+# letter answer row 2
+label_answer = Label(window,text=' Letter Answer ',font=("Arial", 15),fg="white",bg="darkred")
+label_answer.grid(row=2,column=0)
+
+spacing(2,1)
+answer = Entry(window,font=("Arial", 15),fg="black",bg="white",width=20,border=3)
+answer.grid(row=2,column=2)
+
+spacing(2,3)
+
+select_mode = Label(window,text='Select Mode',font=("Arial", 15),fg="darkgray",bg="darkred")
+select_mode.grid(row=2,column=4)
+
+select_mode1 = ttk.Combobox(window, font=('arial', 12), values=["Select","Easy","Normal","Difficault"],width=10)
+select_mode1.grid(row=3,column=4)
+
+#guess letter row 3
+label_guess = Label(window,text='Guess Letter ',font= ("Arial", 15),fg="white",bg="darkred")
+label_guess.grid(row=3,column=0)
+
+spacing(3,1)
+jumble_letter = Entry(window,font=("Arial", 15),fg="black",bg="white",width=20,border=3)
+jumble_letter.grid(row=3,column=2)
+
+spacing(3,5)
+
+# correct word row 4
+label_correct = Label(window,text='Correct Word ',font=("Arial", 15),fg="white",bg="darkred")
+label_correct.grid(row=4,column=0)
+
+spacing(4,1)
+correct_word = Entry(window,font=("Arial", 15),fg="black",bg="white",width=20, border=3)
+correct_word.grid(row=4,column=2)
+
+spacing(5,0)
+
+
+tries = Label(window,text='Turn',font=("Arial", 15),fg="darkgray",bg="darkred")
+tries.grid(row=5,column=4)
+
+spacing(4,1)
+tries_rem = Entry(window,font=("Arial", 12),fg="black",bg="white",width=12, border=3)
+tries_rem.grid(row=6,column=4)
+
+spacing(7,0)
+# enter letter row 6
+submit_button = Button(window,text="Enter Letter",font=("Arial", 15),fg="gold",bg='#6d1210'
+                       ,activeforeground="gold",activebackground='#6d1210',width=18, command=submit)
+submit_button.grid(row=6,column=0,columnspan=6)
+
+#spacing(7,0)
+# new game row 7
+submit_button1 = Button(window,text="New Game ",font=("Arial", 15),fg="gold",bg='#6d1210'
+                       ,activeforeground="gold",activebackground='#6d1210',width=18, command=submit1)
+submit_button1.grid(row=7,column=0,columnspan=6)
+
+spacing(8,0)
+user_names = Label(window,text='User Name    ',font=("Arial", 15),fg="white",bg="darkred")
+user_names.grid(row=9,column=0)
+spacing(9,1)
+
+user_names1 = Entry(window,font=("Arial", 15),fg="black",bg="white",width=20, border=3)
+user_names1.grid(row=9,column=2)
+
+
+#spacing(10,0)
+player = Button(window,text="New User   ",font=("Arial", 15),fg="gold",bg='#6d1210'
+                       ,activeforeground="gold",activebackground='#6d1210',width=18, command=submit2)
+player.grid(row=10,column=0,columnspan=6)
+
+space_9 = Label(window,text='',
+                font=("Arial", 10),fg="darkred",bg="darkred")
+space_9.grid(row=11,column=6,columnspan=4)
+
+'''space_9 = Label(window,text='                                           ',
+                font=("Arial", 10),fg="darkred",bg="darkred",border=1,relief=SUNKEN,anchor="ne")
+space_9.grid(row=11,column=6,columnspan=6,sticky=W + E)'''
+#spacing(9,6)
+
+window = mainloop()
